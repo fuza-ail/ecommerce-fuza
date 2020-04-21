@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "fuzail",
+    "password": null,
+    "database": "ecommerce",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  },
+  "test": {
+    "username": "root",
+    "password": null,
+    "database": "database_test",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  },
+  "production": {
+    "username": "yszxrktrdleybw",
+    "password": "abd14a051192499b710068e551351898636506750b048cb1e4b23917b7af8565",
+    "database": "d45oc2gb0up34l",
+    "host": "ec2-54-210-128-153.compute-1.amazonaws.com",
+    "dialect": "postgres"
+  }
+}
