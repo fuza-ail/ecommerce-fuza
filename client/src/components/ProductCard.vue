@@ -9,13 +9,29 @@
     <p>{{product.name}}</p>
     <p>{{product.description}}</p>
     <p>{{formatPrice(product.price)}}</p>
-    <button class="btn btn-dark">Add to Cart</button>
+    <div v-if="addStatus">
+      <button class="btn btn-dark" @click="form">Add to Cart</button>
+    </div>
+    <div v-else>
+      <form @submit.prevent="addCart">
+        <label for="amount">Amount</label><br>
+        <input v-model="amount" type="number" id="amount" style="width:100px;text-align:center;"><br>
+        <button style="width:100px" class="btn btn-dark">Add</button>
+      </form>
+      <button @click="hideForm" style="width:100px" class="btn btn-info">Cancel</button>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
   name: "ProductCard",
+  data(){
+    return{
+      addStatus: true,
+      amount: ''
+    }
+  },
   props: ["product"],
   methods: {
     formatPrice(num) {
@@ -24,6 +40,19 @@ export default {
         currency: "IDR"
       });
       return formatter.format(Number(num));
+    },
+    form(){
+      this.addStatus = false
+    },
+    hideForm(){
+      this.addStatus = true
+    },
+    addCart(){
+      let data={
+        ProductId : this.product.id,
+        amount: this.amount
+      }
+      this.$store.dispatch('addCart',data)
     }
   }
 };

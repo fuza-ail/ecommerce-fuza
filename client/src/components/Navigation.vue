@@ -9,7 +9,7 @@
           <div id="login" @click="loginSection">login</div>
         </div>
         <div v-else>
-          <div id="logout" @click="registerSection">Logout</div>
+          <div id="logout" @click="logout"><button class="btn btn-info">Logout</button></div>
         </div>
         <div id="cart">
           <router-link style="color:rgb(233, 233, 233)" to="/cart">
@@ -62,6 +62,12 @@ export default {
     changeLog(){
       this.isLogin = false
       this.logged = true
+    },
+    logout(){
+      localStorage.removeItem('access_token')
+      localStorage.removeItem('email')
+      this.logged = false
+      this.$router.push({path:'/'})
     }
   }
 };
@@ -103,5 +109,9 @@ nav {
 i:hover {
   color: white;
   cursor: pointer;
+}
+button{
+  padding:0 5px;
+  border-radius:0;
 }
 </style>

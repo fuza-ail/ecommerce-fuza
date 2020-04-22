@@ -72,7 +72,7 @@ class Controller {
   }
   // get cart
   static getData(req, res, next) {
-    Customer.findAll({
+    Customer.findOne({
       include: [{
         model: Cart,
         include: Product
@@ -96,18 +96,18 @@ class Controller {
       .then(cart => {
         if (cart) {
           return Cart.update({
-            amount: cart.amount++
+            amount: req.body.amount
           }, { where: { id: cart.id }, returning: true })
         } else {
           return Cart.create({
             CustomerId: req.customer.CustomerId,
             ProductId: req.body.ProductId,
-            amount: 1
+            amount: req.body.amount
           })
         }
       })
       .then(cart => {
-        res.status(200).json(cart[1])
+        res.status(200).json(cart)
       })
       .catch(err => {
         next(err)

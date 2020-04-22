@@ -1,7 +1,8 @@
 <template>
   <div class="cart">
-    <p>cart</p>
-    <ReviewCard></ReviewCard>
+    <ReviewCard v-for="item in carts" :key="item.id" :cart="item"></ReviewCard>
+    <button class="btn btn-dark">Checkout</button>
+    {{carts}}
   </div>
 </template>
 
@@ -14,5 +15,13 @@ export default {
   components: {
     ReviewCard
   },
+  computed:{
+    carts(){
+      return this.$store.state.carts
+    }
+  },
+  created(){
+    this.$store.dispatch('getCarts')
+  }
 };
 </script>
