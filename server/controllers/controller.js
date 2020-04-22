@@ -133,7 +133,7 @@ class Controller {
       })
       .then(cart => {
         res.status(200).json({
-          mesage: 'Item removed'
+          message: 'Item removed'
         })
       })
       .catch(err => {

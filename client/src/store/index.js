@@ -35,6 +35,18 @@ export default new Vuex.Store({
     },
     CheckOut(state){
       state.carts = []
+    },
+    SmartPhone(state, payload){
+      state.products = payload
+    },
+    Tablet(state, payload){
+      state.products = payload
+    },
+    Laptop(state, payload){
+      state.products = payload
+    },
+    All(state, payload){
+      state.products = payload
     }
   },
   actions: {
