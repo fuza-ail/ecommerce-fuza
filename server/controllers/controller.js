@@ -75,6 +75,7 @@ class Controller {
     Customer.findOne({
       include: [{
         model: Cart,
+        where: { CustomerId: req.customer.CustomerId },
         include: Product
       }]
     }, { where: { id: req.customer.CustomerId } })
@@ -97,14 +98,24 @@ class Controller {
         if (cart) {
           return Cart.update({
             amount: req.body.amount
-          }, { where: { id: cart.id }, returning: true })
+          }, { include: [{ model: Product }], where: { id: cart.id }, returning: true })
         } else {
           return Cart.create({
             CustomerId: req.customer.CustomerId,
             ProductId: req.body.ProductId,
             amount: req.body.amount
-          })
+          }, { include: [{ model: Product }] })
         }
+      })
+      .then(cart => {
+        let data
+        if (cart[0] == 1) {
+          data = cart[1][0]
+          console.log(data)
+        } else {
+          data = cart
+        }
+        return Cart.findByPk(data.id, { include: [{ model: Product }] })
       })
       .then(cart => {
         res.status(200).json(cart)
@@ -134,10 +145,13 @@ class Controller {
     Cart.findByPk(req.params.id)
       .then(cart => {
         return Cart.update({
-          CustomerId: req.customer.CustomerId,
-          Product: req.body.ProductId,
+          // CustomerId: req.customer.CustomerId,
+          // Product: req.body.ProductId,
           amount: req.body.amount
         }, { where: { id: cart.id } })
+      })
+      .then(cart => {
+        return Cart.findByPk(req.params.id, { include: [{ model: Product }] })
       })
       .then(cart => {
         res.status(200).json(cart)
@@ -147,8 +161,36 @@ class Controller {
       })
   }
 
-  static checkOut(req,res,next){
-    
+  static checkOut(req, res, next) {
+    Cart.findAll({ where: { CustomerId: req.customer.CustomerId }, include: [{ model: Product }] })
+      .then(carts => {
+        // res.json(carts)
+        const data = []
+        for (let i = 0; i < carts.length; i++) {
+          if(carts[i].amount<=carts[i].Product.stock){
+            data.push(Product.update({
+              stock: carts[i].Product.stock - carts[i].amount
+            },{where:{id:carts[i].ProductId}}))
+          }else{
+            throw {
+              status: 400,
+              message: 'Stock is not enough'
+            }
+          }
+        }
+        return Promise.all(data)
+      })
+      .then(data=>{
+        return Cart.destroy({where:{CustomerId:req.customer.CustomerId}})
+      })
+      .then(data=>{
+        res.status(200).json({
+          message: 'Successfully checkout'
+        })
+      })
+      .catch(err => {
+        next(err)
+      })
   }
 }
 

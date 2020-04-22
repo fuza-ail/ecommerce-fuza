@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import axios from 'axios'
+import axios from 'axios';
+import Router from '@/router'
 
 Vue.use(Vuex);
 
@@ -11,13 +12,29 @@ export default new Vuex.Store({
   },
   mutations: {
     FillProducts(state, payload) {
-      state.products = payload
+      state.products = [...payload]
     },
     FillCarts(state, payload) {
-      state.carts = payload
+      state.carts = [...payload]
     },
     AddCart(state, payload) {
-      state.carts.push(payload)
+      state.carts=[...state.carts,payload]
+      // console.log(state.carts)
+    },
+    DeleteCart(state,payload){
+      state.carts = state.carts.filter(item=>item.id != payload)
+    },
+    EditCart(state,payload){
+      let index
+      for(let i = 0; i<state.carts.length; i++){
+        if(state.carts[i].id == payload.id){
+          index = i
+        }
+      }
+      state.carts.splice(index,1,payload)
+    },
+    CheckOut(state){
+      state.carts = []
     }
   },
   actions: {
@@ -43,6 +60,7 @@ export default new Vuex.Store({
       })
         .then(response => {
           let data = response.data.Carts
+          // console.log(data)
           commit('FillCarts', data)
         })
         .catch(err => {
@@ -62,13 +80,63 @@ export default new Vuex.Store({
         }
       })
         .then(response => {
-          console.log(response.data)
           commit('AddCart', response.data)
-          router.push({path:'/cart'})
+          // console.log(response.data)
+          Router.push({path:'/cart'})
         })
         .catch(err => {
-          console.log(err.response)
+          console.log(err)
         })
+    },
+    deleteCart({commit},payload){
+      axios({
+        method: 'delete',
+        url: `http://localhost:3000/cart/delete/${payload}`,
+        headers:{
+          access_token: localStorage.getItem('access_token')
+        }
+      })
+      .then(response=>{
+        commit('DeleteCart',payload)
+      })
+      .catch(err=>{
+        console.log(err)
+      })
+    },
+    editCart({commit},payload){
+      axios({
+        method: 'put',
+        url: `http://localhost:3000/cart/edit/${payload.id}`,
+        headers:{
+          access_token: localStorage.getItem('access_token')
+        },
+        data:{
+          amount: payload.amount
+        }
+      })
+      .then(response=>{
+        // console.log(response.data)
+        commit('EditCart',response.data)
+      })
+      .catch(err=>{
+        console.log(err.response)
+      })
+    },
+    checkOut({commit},payload){
+      axios({
+        method: 'post',
+        url: `http://localhost:3000/cart/checkout`,
+        headers:{
+          access_token: localStorage.getItem('access_token')
+        }
+      })
+      .then(response=>{
+        commit('CheckOut')
+        Router.push({path:'/'})
+      })
+      .catch(err=>{
+        console.log(err.response)
+      })
     }
   },
   modules: {

@@ -68,6 +68,7 @@ export default {
       localStorage.removeItem('email')
       this.logged = false
       this.$router.push({path:'/'})
+      this.$store.state.carts =[]
     }
   }
 };

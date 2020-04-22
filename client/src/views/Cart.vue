@@ -1,19 +1,27 @@
 <template>
   <div class="cart">
-    <ReviewCard v-for="item in carts" :key="item.id" :cart="item"></ReviewCard>
-    <button class="btn btn-dark">Checkout</button>
-    {{carts}}
+    <ReviewCard v-for="(item,index) in carts" :key="index" :cart="item"></ReviewCard>
+    <button class="btn btn-dark" @click="checkOut">Checkout</button>
+    <button class="btn btn-info" @click="toHome">Cancel</button>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import ReviewCard from '../components/ReviewCard'
+import ReviewCard from '../components/ReviewCard.vue'
 
 export default {
   name: 'Cart',
   components: {
     ReviewCard
+  },
+  methods:{
+    toHome(){
+      this.$router.push({path:'/'})
+    },
+    checkOut(){
+      this.$store.dispatch('checkOut')
+    }
   },
   computed:{
     carts(){
@@ -25,3 +33,9 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+  button{
+    margin: 20px 10px;
+  }
+</style>

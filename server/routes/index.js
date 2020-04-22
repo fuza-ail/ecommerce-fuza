@@ -12,7 +12,7 @@ router.get('/cart',authentication, Controller.getData);
 router.post('/cart/add',authentication,Controller.addItem);
 router.delete('/cart/delete/:id', authentication, authorization, Controller.deleteItem);
 router.put('/cart/edit/:id', authentication,authorization,Controller.editItem);
-router.put('/cart/checkout', authentication,authorization,Controller.checkOut)
+router.post('/cart/checkout', authentication,Controller.checkOut)
 
 router.use(errorHandler)
 

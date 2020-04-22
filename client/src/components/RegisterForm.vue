@@ -34,10 +34,8 @@
           localStorage.setItem('access_token', response.data.access_token)
           localStorage.setItem('email', response.data.email)
           this.$emit('emitLog')
-          console.log(response.data)
         })
         .catch(err=>{
-          console.log('masuk')
           console.log(err.response)
         })
       }
