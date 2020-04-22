@@ -1,18 +1,18 @@
 <template>
   <div class="cart">
-    <Navigation></Navigation>
     <p>cart</p>
+    <ReviewCard></ReviewCard>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import Navigation from '../components/Navigation'
+import ReviewCard from '../components/ReviewCard'
 
 export default {
   name: 'Cart',
   components: {
-    Navigation
+    ReviewCard
   },
 };
 </script>
