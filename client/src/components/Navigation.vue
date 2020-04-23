@@ -9,7 +9,9 @@
           <div id="login" @click="loginSection">login</div>
         </div>
         <div v-else>
-          <div id="logout" @click="logout"><button class="btn btn-info">Logout</button></div>
+          <div id="logout" @click="logout">
+            <button class="btn btn-info">Logout</button>
+          </div>
         </div>
         <div id="cart">
           <router-link style="color:rgb(233, 233, 233)" to="/cart">
@@ -29,14 +31,14 @@
 
 <script>
 import LoginForm from "./LoginForm";
-import RegisterForm from "./RegisterForm"
+import RegisterForm from "./RegisterForm";
 
 export default {
   name: "Navigation",
   data() {
     return {
       isLogin: false,
-      logged: localStorage.getItem('access_token')?true:false,
+      logged: localStorage.getItem("access_token") ? true : false,
       register: true
     };
   },
@@ -52,23 +54,30 @@ export default {
         this.isLogin = true;
       }
     },
-    registerSection(){
-      if(!this.register){
-        this.register = true
-      }else{
-        this.register = false
+    registerSection() {
+      if (!this.register) {
+        this.register = true;
+      } else {
+        this.register = false;
       }
     },
-    changeLog(){
-      this.isLogin = false
-      this.logged = true
+    changeLog() {
+      this.isLogin = false;
+      this.logged = true;
     },
-    logout(){
-      localStorage.removeItem('access_token')
-      localStorage.removeItem('email')
-      this.logged = false
-      this.$router.push({path:'/'})
-      this.$store.state.carts =[]
+    logout() {
+      localStorage.removeItem("access_token");
+      localStorage.removeItem("email");
+      this.logged = false;
+      this.$router.push({ path: "/" });
+      this.$store.state.carts = [];
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: `Successfully logged out`,
+        showConfirmButton: false,
+        timer: 1500
+      });
     }
   }
 };
@@ -94,7 +103,8 @@ nav {
 .user {
   display: flex;
 }
-#login,#logout {
+#login,
+#logout {
   padding-right: 20px;
 }
 #login:hover {
@@ -111,8 +121,8 @@ i:hover {
   color: white;
   cursor: pointer;
 }
-button{
-  padding:0 5px;
-  border-radius:0;
+button {
+  padding: 0 5px;
+  border-radius: 0;
 }
 </style>

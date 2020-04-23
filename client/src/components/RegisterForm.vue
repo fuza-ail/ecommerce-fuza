@@ -33,10 +33,23 @@
         .then(response=>{
           localStorage.setItem('access_token', response.data.access_token)
           localStorage.setItem('email', response.data.email)
-          this.$emit('emitLog')
+          this.$emit('emitLog');
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: `Wellcome ${localStorage.getItem('email')}`,
+            showConfirmButton: false,
+            timer: 1500
+          });
         })
         .catch(err=>{
-          console.log(err.response)
+          Swal.fire({
+            position: "center",
+            icon: "warning",
+            title: `${err.response.data.message}`,
+            showConfirmButton: false,
+            timer: 1500
+          });
         })
       }
     }

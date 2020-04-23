@@ -18,34 +18,34 @@ export default new Vuex.Store({
       state.carts = [...payload]
     },
     AddCart(state, payload) {
-      state.carts=[...state.carts,payload]
+      state.carts = [...state.carts, payload]
       // console.log(state.carts)
     },
-    DeleteCart(state,payload){
-      state.carts = state.carts.filter(item=>item.id != payload)
+    DeleteCart(state, payload) {
+      state.carts = state.carts.filter(item => item.id != payload)
     },
-    EditCart(state,payload){
+    EditCart(state, payload) {
       let index
-      for(let i = 0; i<state.carts.length; i++){
-        if(state.carts[i].id == payload.id){
+      for (let i = 0; i < state.carts.length; i++) {
+        if (state.carts[i].id == payload.id) {
           index = i
         }
       }
-      state.carts.splice(index,1,payload)
+      state.carts.splice(index, 1, payload)
     },
-    CheckOut(state){
+    CheckOut(state) {
       state.carts = []
     },
-    SmartPhone(state, payload){
+    SmartPhone(state, payload) {
       state.products = payload
     },
-    Tablet(state, payload){
+    Tablet(state, payload) {
       state.products = payload
     },
-    Laptop(state, payload){
+    Laptop(state, payload) {
       state.products = payload
     },
-    All(state, payload){
+    All(state, payload) {
       state.products = payload
     }
   },
@@ -94,61 +94,118 @@ export default new Vuex.Store({
         .then(response => {
           commit('AddCart', response.data)
           // console.log(response.data)
-          Router.push({path:'/cart'})
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: `Item has been added to cart`,
+            showConfirmButton: false,
+            timer: 1500
+          });
+          Router.push({ path: '/cart' })
         })
         .catch(err => {
-          console.log(err)
+          Swal.fire({
+            position: "center",
+            icon: "warning",
+            title: `${err.response.data.message}`,
+            showConfirmButton: false,
+            timer: 1500
+          });
         })
     },
-    deleteCart({commit},payload){
-      axios({
-        method: 'delete',
-        url: `http://localhost:3000/cart/delete/${payload}`,
-        headers:{
-          access_token: localStorage.getItem('access_token')
+    deleteCart({ commit }, payload) {
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+      }).then((result) => {
+        if (result.value) {
+          axios({
+            method: 'delete',
+            url: `http://localhost:3000/cart/delete/${payload}`,
+            headers: {
+              access_token: localStorage.getItem('access_token')
+            }
+          })
+            .then(response => {
+              commit('DeleteCart', payload)
+            })
+            .catch(err => {
+              console.log(err)
+            })
+          Swal.fire(
+            'Deleted!',
+            'Your file has been deleted.',
+            'success'
+          )
         }
       })
-      .then(response=>{
-        commit('DeleteCart',payload)
-      })
-      .catch(err=>{
-        console.log(err)
-      })
+
     },
-    editCart({commit},payload){
+    editCart({ commit }, payload) {
       axios({
         method: 'put',
         url: `http://localhost:3000/cart/edit/${payload.id}`,
-        headers:{
+        headers: {
           access_token: localStorage.getItem('access_token')
         },
-        data:{
+        data: {
           amount: payload.amount
         }
       })
-      .then(response=>{
-        // console.log(response.data)
-        commit('EditCart',response.data)
-      })
-      .catch(err=>{
-        console.log(err.response)
-      })
+        .then(response => {
+          // console.log(response.data)
+          commit('EditCart', response.data)
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: `Successfully edited`,
+            showConfirmButton: false,
+            timer: 1500
+          });
+        })
+        .catch(err => {
+          Swal.fire({
+            position: "center",
+            icon: "warning",
+            title: `${err.response.data.message}`,
+            showConfirmButton: false,
+            timer: 1500
+          });
+        })
     },
-    checkOut({commit},payload){
+    checkOut({ commit }, payload) {
       axios({
         method: 'post',
         url: `http://localhost:3000/cart/checkout`,
-        headers:{
+        headers: {
           access_token: localStorage.getItem('access_token')
         }
       })
-      .then(response=>{
-        commit('CheckOut')
-        Router.push({path:'/'})
-      })
-      .catch(err=>{
-        console.log(err.response)
-      })
+        .then(response => {
+          commit('CheckOut')
+          Router.push({ path: '/' })
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: `Successfully checked out`,
+            showConfirmButton: false,
+            timer: 1500
+          });
+        })
+        .catch(err => {
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: `${err.response.data.message}`,
+            showConfirmButton: false,
+            timer: 1500
+          });
+        })
     }
   },
   modules: {
