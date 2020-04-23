@@ -24,7 +24,7 @@
       register(){
         axios({
           method:'post',
-          url:'http://localhost:3000/register',
+          url:'https://nameless-journey-65036.herokuapp.com/register',
           data:{
             email: this.email,
             password: this.password

@@ -53,7 +53,7 @@ export default new Vuex.Store({
     getProducts({ commit }) {
       axios({
         method: 'get',
-        url: 'http://localhost:3000',
+        url: 'https://nameless-journey-65036.herokuapp.com',
       })
         .then(response => {
           commit('FillProducts', response.data)
@@ -65,7 +65,7 @@ export default new Vuex.Store({
     getCarts({ commit }) {
       axios({
         method: 'get',
-        url: 'http://localhost:3000/cart',
+        url: 'https://nameless-journey-65036.herokuapp.com/cart',
         headers: {
           access_token: localStorage.getItem('access_token')
         }
@@ -82,7 +82,7 @@ export default new Vuex.Store({
     addCart({ commit }, payload) {
       axios({
         method: 'post',
-        url: 'http://localhost:3000/cart/add',
+        url: 'https://nameless-journey-65036.herokuapp.com/cart/add',
         headers: {
           access_token: localStorage.getItem('access_token')
         },
@@ -126,7 +126,7 @@ export default new Vuex.Store({
         if (result.value) {
           axios({
             method: 'delete',
-            url: `http://localhost:3000/cart/delete/${payload}`,
+            url: `https://nameless-journey-65036.herokuapp.com/cart/delete/${payload}`,
             headers: {
               access_token: localStorage.getItem('access_token')
             }
@@ -149,7 +149,7 @@ export default new Vuex.Store({
     editCart({ commit }, payload) {
       axios({
         method: 'put',
-        url: `http://localhost:3000/cart/edit/${payload.id}`,
+        url: `https://nameless-journey-65036.herokuapp.com/cart/edit/${payload.id}`,
         headers: {
           access_token: localStorage.getItem('access_token')
         },
@@ -181,7 +181,7 @@ export default new Vuex.Store({
     checkOut({ commit }, payload) {
       axios({
         method: 'post',
-        url: `http://localhost:3000/cart/checkout`,
+        url: `https://nameless-journey-65036.herokuapp.com/cart/checkout`,
         headers: {
           access_token: localStorage.getItem('access_token')
         }

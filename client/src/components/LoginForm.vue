@@ -24,7 +24,7 @@ export default {
     login() {
       axios({
         method: "post",
-        url: "http://localhost:3000/login",
+        url: "https://nameless-journey-65036.herokuapp.com/login",
         data: {
           email: this.email,
           password: this.password
