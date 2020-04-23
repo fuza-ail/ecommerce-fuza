@@ -2,7 +2,7 @@
   <div class="cart">
     <ReviewCard v-for="(item,index) in carts" :key="index" :cart="item"></ReviewCard>
     <button class="btn btn-dark" @click="checkOut">Checkout</button>
-    <button class="btn btn-info" @click="toHome">Cancel</button>
+    <button class="btn btn-info" @click="toHome">Home</button>
   </div>
 </template>
 

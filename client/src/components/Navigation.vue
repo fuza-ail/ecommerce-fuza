@@ -69,6 +69,7 @@ export default {
       localStorage.removeItem("access_token");
       localStorage.removeItem("email");
       this.logged = false;
+      this.registerSection()
       this.$router.push({ path: "/" });
       this.$store.state.carts = [];
       Swal.fire({
